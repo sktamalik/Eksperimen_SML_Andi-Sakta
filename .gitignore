@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+
+# MLflow
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Env
+.env
+*.local
+
+# Kaggle
+.kaggle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Screenshots (committed deliberately, so not ignored — but keep editor temp)
+*.tmp
