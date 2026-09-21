@@ -1,0 +1,3 @@
+DagsHub MLflow Tracking: https://dagshub.com/sktamalik/diabetes-mlflow.mlflow
+Run: tuning-randomforest-gridsearch (FINISHED, roc_auc 0.8493)
+Artefak: confusion_matrix.png, roc_curve.png, feature_importance.png, model/
