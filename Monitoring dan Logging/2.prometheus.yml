@@ -1,0 +1,19 @@
+# Prometheus configuration — Monitoring Submission SMSML
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "mlflow-inference"
+    static_configs:
+      - targets: ["host.docker.internal:9091"]  # prometheus_exporter.py
+    metrics_path: /metrics
+
+  - job_name: "mlflow-inference-api"
+    static_configs:
+      - targets: ["host.docker.internal:8000"]  # inference.py (FastAPI /metrics)
+    metrics_path: /metrics
