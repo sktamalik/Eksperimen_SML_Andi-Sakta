@@ -22,5 +22,8 @@ mlflow.db
 .DS_Store
 Thumbs.db
 
+# Logs
+*.log
+
 # Screenshots (committed deliberately, so not ignored — but keep editor temp)
 *.tmp
