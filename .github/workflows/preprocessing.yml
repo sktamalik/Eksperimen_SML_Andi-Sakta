@@ -1,0 +1,59 @@
+name: Preprocessing Automatisk
+
+on:
+  workflow_dispatch: # trigger manual (advance kriteria 1)
+  push:
+    paths:
+      - "diabetes_raw.csv"
+      - "preprocessing/automate_Andi-Sakta.py"
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12.7
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.7"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pandas numpy scikit-learn
+
+      - name: Run automate preprocessing
+        run: |
+          python preprocessing/automate_Andi-Sakta.py
+
+      - name: Verify output dataset
+        run: |
+          python -c "
+          import pandas as pd
+          df = pd.read_csv('preprocessing/diabetes_preprocessing.csv')
+          assert df.isnull().sum().sum() == 0, 'Missing nilai dehabis'
+          print(f'Dataset OK: {df.shape}, clean: {df.isnull().sum().sum()}')
+          "
+
+      - name: Commit hasil preprocessing
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add preprocessing/diabetes_preprocessing.csv
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update preprocessing dataset via workflow [skip ci]"
+            git push
+          fi
