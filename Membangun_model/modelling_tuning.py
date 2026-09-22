@@ -53,6 +53,8 @@ DAGSHUB_TOKEN = os.environ.get("DAGSHUB_USER_TOKEN", "") or os.environ.get("DAGS
 
 def setup_tracking() -> None:
     """Setup MLflow online DagsHub; fallback local kalau tak ada token."""
+    # Hapus MLFLOW_RUN_ID warisan `mlflow run` agar tidak RESOURCE_DOES_NOT_EXIST
+    os.environ.pop("MLFLOW_RUN_ID", None)
     if DAGSHUB_TOKEN:
         import dagshub
         # dagshub client membaca app token dari env DAGSHUB_USER_TOKEN
