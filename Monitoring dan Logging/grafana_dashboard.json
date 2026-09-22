@@ -1,0 +1,95 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "sktamalik-diabetes",
+    "title": "sktamalik - Diabetes Inference Monitoring",
+    "tags": ["smsml", "diabetes"],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 1,
+    "refresh": "5s",
+    "time": {"from": "now-1h", "to": "now"},
+    "panels": [
+      {
+        "id": 1, "title": "Total Request (per endpoint/status)", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 0, "y": 0},
+        "targets": [{"expr": "sum(rate(inference_request_total[1m])) by (endpoint)", "legendFormat": "{{endpoint}}"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 2, "title": "Request In Flight", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 12, "y": 0},
+        "targets": [{"expr": "inference_requests_in_flight", "legendFormat": "in-flight"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 3, "title": "Latency p50/p95 (histogram)", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 0, "y": 7},
+        "targets": [
+          {"expr": "histogram_quantile(0.50, rate(inference_latency_seconds_bucket[5m]))", "legendFormat": "p50"},
+          {"expr": "histogram_quantile(0.95, rate(inference_latency_seconds_bucket[5m]))", "legendFormat": "p95"}
+        ],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 4, "title": "Error Rate", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 12, "y": 7},
+        "targets": [{"expr": "rate(inference_request_errors_total[1m])", "legendFormat": "errors/s"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 5, "title": "Prediksi Positif vs Negatif (rate)", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 0, "y": 14},
+        "targets": [
+          {"expr": "rate(inference_prediction_positive_total[1m])", "legendFormat": "positif (diabetes)"},
+          {"expr": "rate(inference_prediction_negative_total[1m])", "legendFormat": "negatif"}
+        ],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 6, "title": "Probability Mean", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 12, "y": 14},
+        "targets": [{"expr": "inference_probability_mean", "legendFormat": "proba"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 7, "title": "Uptime Server", "type": "stat",
+        "gridPos": {"h": 5, "w": 8, "x": 0, "y": 21},
+        "targets": [{"expr": "model_uptime_seconds", "legendFormat": "uptime"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 8, "title": "Model Version", "type": "stat",
+        "gridPos": {"h": 5, "w": 8, "x": 8, "y": 21},
+        "targets": [{"expr": "model_version", "legendFormat": "version"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 9, "title": "Memory Process", "type": "stat",
+        "gridPos": {"h": 5, "w": 8, "x": 16, "y": 21},
+        "targets": [{"expr": "inference_process_memory_bytes", "legendFormat": "rss"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 10, "title": "Input Glucose Mean", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 0, "y": 26},
+        "targets": [{"expr": "input_glucose_mean", "legendFormat": "glucose"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 11, "title": "Input BMI Mean", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 12, "x": 12, "y": 26},
+        "targets": [{"expr": "input_bmi_mean", "legendFormat": "bmi"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      },
+      {
+        "id": 12, "title": "Total Request Counter (raw)", "type": "timeseries",
+        "gridPos": {"h": 7, "w": 24, "x": 0, "y": 33},
+        "targets": [{"expr": "sum(inference_request_total) by (status)", "legendFormat": "status {{status}}"}],
+        "datasource": {"type": "prometheus", "uid": "afyxqvm4jzmkga"}
+      }
+    ]
+  },
+  "overwrite": true,
+  "message": "Dashboard sktamalik - 12 panel metrik inference Diabetes"
+}

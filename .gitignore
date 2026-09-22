@@ -27,3 +27,5 @@ Thumbs.db
 
 # Screenshots (committed deliberately, so not ignored — but keep editor temp)
 *.tmp
+# Playwright MCP artefak
+.playwright-mcp/
