@@ -1,8 +1,8 @@
 {
   "dashboard": {
     "id": null,
-    "uid": "sktamalik-diabetes",
-    "title": "sktamalik - Diabetes Inference Monitoring",
+    "uid": "dashboard-andisaktamalik",
+    "title": "Dashboard-andisaktamalik",
     "tags": ["smsml", "diabetes"],
     "timezone": "browser",
     "schemaVersion": 39,
@@ -91,5 +91,5 @@
     ]
   },
   "overwrite": true,
-  "message": "Dashboard sktamalik - 12 panel metrik inference Diabetes"
+  "message": "Dashboard-andisaktamalik - 12 panel metrik inference Diabetes"
 }

@@ -94,6 +94,19 @@ def load_model():
     return _model
 
 
+def _process_memory_bytes() -> float:
+    """RSS process (bytes). Fallback lintas platform bila resource tidak ada."""
+    try:
+        import psutil
+        return float(psutil.Process().memory_info().rss)
+    except Exception:
+        try:
+            import resource
+            return float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024)
+        except Exception:
+            return 0.0
+
+
 class DiabetesInput(BaseModel):
     Pregnancies: float
     Glucose: float
@@ -136,10 +149,7 @@ async def metrics_middleware(request, call_next):
         if status >= 400:
             REQUEST_ERRORS.inc()
         UPTIME.set(time.time() - _start_time)
-        try:
-            PROCESS_RSS.set(__import__("resource").getrusage(__import__("resource").RUSAGE_SELF).ru_maxrss * 1024)
-        except Exception:
-            PROCESS_RSS.set(0)
+        PROCESS_RSS.set(_process_memory_bytes())
     return response
 
 
