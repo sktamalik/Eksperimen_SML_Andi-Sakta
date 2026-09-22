@@ -40,11 +40,22 @@ jobs:
       - name: Verify output dataset
         run: |
           python -c "
-          import pandas as pd
-          df = pd.read_csv('preprocessing/diabetes_preprocessing.csv')
-          assert df.isnull().sum().sum() == 0, 'Missing nilai dehabis'
-          print(f'Dataset OK: {df.shape}, clean: {df.isnull().sum().sum()}')
+          import hashlib, pandas as pd
+          path = 'preprocessing/diabetes_preprocessing.csv'
+          df = pd.read_csv(path)
+          assert df.isnull().sum().sum() == 0, 'Masih ada nilai kosong setelah preprocessing'
+          assert df.shape[1] == 9, f'Kolom harus 9, dapat {df.shape[1]}'
+          digest = hashlib.sha256(open(path, 'rb').read()).hexdigest()
+          print(f'Dataset OK: shape={df.shape}, missing={df.isnull().sum().sum()}')
+          print(f'sha256={digest}')
           "
+
+      - name: Upload dataset hasil preprocessing
+        uses: actions/upload-artifact@v4
+        with:
+          name: diabetes-preprocessing
+          path: preprocessing/diabetes_preprocessing.csv
+          if-no-files-found: error
 
       - name: Commit hasil preprocessing
         run: |
