@@ -59,7 +59,7 @@ PROCESS_RSS = Gauge("inference_process_memory_bytes", "Memory process (bytes)")
 # Konfigurasi
 # ---------------------------------------------------------------
 MODEL_RUN_ID = os.environ.get("MODEL_RUN_ID", "a7f8f765378640ab954e5fcb2d2d4b88")
-DAGSHUB_TOKEN = os.environ.get("DAGSHUB_TOKEN", "")
+DAGSHUB_TOKEN = os.environ.get("DAGSHUB_USER_TOKEN", "") or os.environ.get("DAGSHUB_TOKEN", "")
 FEATURES = [
     "Pregnancies", "Glucose", "BloodPressure", "SkinThickness",
     "Insulin", "BMI", "DiabetesPedigreeFunction", "Age",
@@ -78,6 +78,8 @@ def load_model():
 
     if DAGSHUB_TOKEN:
         import dagshub
+        # dagshub client membaca app token dari env DAGSHUB_USER_TOKEN
+        os.environ["DAGSHUB_USER_TOKEN"] = DAGSHUB_TOKEN
         dagshub.init(repo_owner="sktamalik", repo_name="diabetes-mlflow", mlflow=True)
         uri = f"runs:/{MODEL_RUN_ID}/model"
         print(f"Load model dari DagsHub: {uri}")
